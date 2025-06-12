@@ -93,3 +93,5 @@ radio.onReceivedString(function (ReceivedString) {
     lCommand = parseInt(dilek[0])
     rCommand = parseInt(dilek[1])
 })
+
+//Ahoj :3
