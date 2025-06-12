@@ -2,6 +2,8 @@
 //let o = 125
 //const stripLenght: number = 36;
 //let pasek = neopixel.create(DigitalPin.P0, stripLenght, NeoPixelMode.RGB)
+radio.setGroup(123)
+radio.setFrequencyBand(48)
 type IRC = {
     l: DigitalPin,
     c: DigitalPin,
