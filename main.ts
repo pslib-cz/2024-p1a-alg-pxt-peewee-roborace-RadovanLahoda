@@ -55,7 +55,6 @@ basic.forever(function () {
             rCommand = 0
         }
         if (datal == 0) {
-            //idk
         }
         basic.pause(20)
     }
