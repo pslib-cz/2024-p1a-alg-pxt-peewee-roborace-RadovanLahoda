@@ -1,10 +1,6 @@
-//let p = 0
-//let o = 125
-//const stripLenght: number = 36;
-//let pasek = neopixel.create(DigitalPin.P0, stripLenght, NeoPixelMode.RGB)
-
 radio.setGroup(123)
 radio.setFrequencyBand(48)
+radio.setTransmitSerialNumber(true)
 type IRC = {
     l: DigitalPin,
     c: DigitalPin,
@@ -15,82 +11,105 @@ const IR: IRC = {
     c: DigitalPin.P15,
     r: DigitalPin.P13
 }
-
+let a = 1
+let b = 1
+let c = 1
+let e = 0
+let f = 0
+let g = 0
+let lCommand = 0
 pins.setPull(IR.l, PinPullMode.PullNone);
 pins.setPull(IR.c, PinPullMode.PullNone);
 pins.setPull(IR.r, PinPullMode.PullNone);
-let datal: number;
-let datar: number;
-let datac: number;
-let lCommand = 0
-let rCommand = 0
-let blackL = 0
-let blackR = 0
-
 basic.forever(function () {
-    datal = pins.digitalReadPin(IR.l);
-    datac = pins.digitalReadPin(IR.c)
-    datar = pins.digitalReadPin(IR.r)
-
+    radio.onReceivedString(function (ReceivedString) {
+        let dilek = ReceivedString
+        lCommand = parseInt(dilek)
+    })
+    a = pins.digitalReadPin(IR.l)
+    b = pins.digitalReadPin(IR.c)
+    c = pins.digitalReadPin(IR.r)
+    if (a && b && c == 0) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
+        e = 0
+        basic.pause(20)
+    }
     if (lCommand == 1) {
-        if (datar == 0) {
-        }
-        if (datal == 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-            blackL = 1
-        }
-        if ((datal == 1) && (blackL == 1)) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, 200)
-            lCommand = 0
-        }
-        basic.pause(20)
-    }
-    if (rCommand == 1) {
-        if (datar == 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
-            blackR = 1
-        }
-        if ((datar == 1) && (blackR == 1)) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, 200)
-            rCommand = 0
-        }
-        if (datal == 0) {
-        }
-        basic.pause(20)
-    }
-    if ((rCommand == 0) && (lCommand == 0)) {
-        if (datal === 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-        }
-        if (datar === 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
-        }
-        if (datac === 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M1, 200)
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, -200)
-        }
-        basic.pause(20)
-    }
-    if ((rCommand == 1) && (lCommand == 1)) {
-        rCommand = 0
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
+        basic.pause(500)
         lCommand = 0
     }
-//    o += 5
-//    p += 5
-//    pasek.showRainbow(o, p)
-//    pasek.show()
-//    if (o >= 350) {
-//        o = -0
-//    }
-//    if (p >= 350) {
-//        p = -0
-//    }
+    if (lCommand == 2) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+        basic.pause(500)
+        lCommand = 0
+    }
+    if (lCommand == 3) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
+        basic.pause(500)
+        lCommand = 0
+    }
+    if (lCommand == 4) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
+        basic.pause(500)
+        lCommand = 0
+    }
+    //if (a && b && c == 0) {
+    //    PCAmotor.MotorRun(PCAmotor.Motors.M4, 200)
+    //    PCAmotor.MotorRun(PCAmotor.Motors.M1, -200)
+    //    e = 0
+    //    basic.pause(20)
+    //}
+    if (a && b == 1, c && g == 0) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
+        e = 0
+        basic.pause(20)
+    }
+    if (b && c == 1, a && f == 0) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+        e = 0
+        basic.pause(20)
+    }
+    if (a && c == 1, b == 0, e == 1) {
+        let d = Math.randomRange(0, 1)
+        e = 1
+        if (d == 0) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
+        }
+        if (d == 1) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
+        }
+        basic.pause(20)
+    }
+    if (a == 1, b && c == 0) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+        e = 0
+        basic.pause(20)
+        f = 1
+    }
+    //if (b == 1, a && c == 0){
+    //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
+    //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
+    //    e = 0
+    //    basic.pause(20)
+    //    f = 0
+    //    g = 0
+    //}
+    if (c == 1, a && b == 0) {
+        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
+        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
+        e = 0
+        basic.pause(20)
+        g = 1
+    }
 })
-
-radio.onReceivedString(function (ReceivedString) {
-    let dilek = ReceivedString.split(',')
-    lCommand = parseInt(dilek[0])
-    rCommand = parseInt(dilek[1])
-})
-
-//Ahoj :3
