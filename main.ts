@@ -12,104 +12,205 @@ const IR: IRC = {
     r: DigitalPin.P13
 }
 let a = 1
-let b = 1
-let c = 1
+let b = 0
+let c = 0
+let d = 0
 let e = 0
 let f = 0
 let g = 0
 let lCommand = 0
+let kapr = 0
+let komet = 0
+let irl = 0
+let irc = 0
+let irr = 0
 pins.setPull(IR.l, PinPullMode.PullNone);
 pins.setPull(IR.c, PinPullMode.PullNone);
 pins.setPull(IR.r, PinPullMode.PullNone);
 basic.forever(function () {
-    radio.onReceivedString(function (ReceivedString) {
-        let dilek = ReceivedString
-        lCommand = parseInt(dilek)
-    })
-    a = pins.digitalReadPin(IR.l)
-    b = pins.digitalReadPin(IR.c)
-    c = pins.digitalReadPin(IR.r)
-    if (a && b && c == 0) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
-        e = 0
-        basic.pause(20)
-    }
-    if (lCommand == 1) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
-        basic.pause(500)
-        lCommand = 0
-    }
-    if (lCommand == 2) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-        basic.pause(500)
-        lCommand = 0
-    }
-    if (lCommand == 3) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
-        basic.pause(500)
-        lCommand = 0
-    }
-    if (lCommand == 4) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, -100)
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 125)
-        basic.pause(500)
-        lCommand = 0
-    }
-    //if (a && b && c == 0) {
-    //    PCAmotor.MotorRun(PCAmotor.Motors.M4, 200)
-    //    PCAmotor.MotorRun(PCAmotor.Motors.M1, -200)
-    //    e = 0
-    //    basic.pause(20)
-    //}
-    if (a && b == 1, c && g == 0) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
-        e = 0
-        basic.pause(20)
-    }
-    if (b && c == 1, a && f == 0) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-        e = 0
-        basic.pause(20)
-    }
-    if (a && c == 1, b == 0, e == 1) {
-        let d = Math.randomRange(0, 1)
-        e = 1
+    console.log(IR.c)
+    irr = pins.digitalReadPin(IR.r);
+    irl = pins.digitalReadPin(IR.l);
+    irc = pins.digitalReadPin(IR.c);
+    //radio.onReceivedString(function (ReceivedString) {
+    //    let dilek = ReceivedString
+    //    lCommand = parseInt(dilek)
+    //    d = 0
+    //})
+    if (lCommand == 0) {
+        //forward
         if (d == 0) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
+            d = 1
+            basic.showArrow(0, 20)
+            basic.pause(20)
         }
-        if (d == 1) {
-            PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-            PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
+        //if (irc && irl && irr == 0, a == 1){
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+        //    basic.pause(20)
+        //} else 
+        //if (irl == 0, irr == 1){
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M1, -150)
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+        //    basic.pause(20)
+        //} else if (irr == 0, irl == 1) {
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M4, 150)
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+        //    basic.pause(20)
+        //}
+        //if (irc && irr && irl== 0, a == 1) {
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+        //    c = 0
+        //    basic.pause(20)
+        //} else 
+        //if (irc == 1, irl && irr == 0, a == 1) {
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+        //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+        //    c = 0
+        //    basic.pause(20)
+        //} else 
+        if (irl == 0, irr == 1) {
+            e = e / 1.05
+            f = 150
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, e)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, f)
+            basic.pause(20)
+        } else if (irr == 0, irl == 1) {
+            e = 150
+            f = f / 1.05
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -e)
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, -f)
+            basic.pause(20)
+        } else if (irc && irr && irl == 1) {
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, -e)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, f)
+        } else if (irc == 1) {
+            e = 150
+            f = 150
+            PCAmotor.MotorRun(PCAmotor.Motors.M1, e)
+            PCAmotor.MotorRun(PCAmotor.Motors.M4, -f)
         }
-        basic.pause(20)
+        if (irc == 0, b == 1) {
+            a = 1
+            b = 0
+            basic.pause(20)
+        }
     }
-    if (a == 1, b && c == 0) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, 0)
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-        e = 0
-        basic.pause(20)
-        f = 1
-    }
-    //if (b == 1, a && c == 0){
-    //    PCAmotor.MotorRun(PCAmotor.Motors.M4, -100)
-    //    PCAmotor.MotorRun(PCAmotor.Motors.M1, 100)
-    //    e = 0
-    //    basic.pause(20)
-    //    f = 0
-    //    g = 0
+    //if (lCommand == 1){
+    //    //left
+    //    if (d == 0){
+    //        d = 1
+    //        basic.showArrow(6, 20)
+    //    }
+    //    if (irc && irl && irr == 1, a && c == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, -150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 1
+    //        basic.pause(20)
+    //    }
+    //    if (irl == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        basic.pause(20)
+    //    }
+    //    if (irr == 1, irl == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        basic.pause(20)
+    //    }
+    //    if (irc && irr && irl == 0, a == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    if (irc == 1, irl && irr && a == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    //konec oprav
+    //    if (irc == 0, b == 1) {
+    //        a = 1
+    //        b = 0
+    //        basic.pause(20)
+    //    }
     //}
-    if (c == 1, a && b == 0) {
-        PCAmotor.MotorRun(PCAmotor.Motors.M4, -125)
-        PCAmotor.MotorRun(PCAmotor.Motors.M1, 0)
-        e = 0
-        basic.pause(20)
-        g = 1
-    }
+    //if (lCommand == 2){
+    //    //right
+    //    if (d == 0) {
+    //        d = 1
+    //        basic.showArrow(2, 20)
+    //    }
+    //    if (irc && irl && irr == 0, a && c == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, 150)
+    //        c = 1
+    //        basic.pause(20)
+    //    }
+    //    if (irr == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        basic.pause(20)
+    //    }
+    //    if (irl == 0, irr == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        basic.pause(20)
+    //    }
+    //    if (irc && irr && irl && a == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    if (irc == 0, irl && irr && a == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    if (irc == 0, b == 1) {
+    //        a = 1
+    //        b = 0
+    //        basic.pause(20)
+    //    }
+    //}
+    //if (lCommand == 3) {
+    //    //backward
+    //    if (d == 0) {
+    //        d = 1
+    //        basic.showArrow(4, 20)
+    //        basic.pause(20)
+    //    }
+    //    if (irc && irl && irr == 0, a && c == 0) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, 150)
+    //        c = 1
+    //        basic.pause(20)
+    //    }
+    //    if (irl == 0, irr == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, 150)
+    //        basic.pause(20)
+    //    }
+    //    if (irr == 0, irl == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, -150)
+    //        basic.pause(20)
+    //    }
+    //    if (irc && irr && irl && a == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    if (irc == 0, irl && irr && a == 1) {
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M1, 150)
+    //        PCAmotor.MotorRun(PCAmotor.Motors.M4, -150)
+    //        c = 0
+    //        basic.pause(20)
+    //    }
+    //    if (irc == 0, b == 1) {
+    //        a = 1
+    //        b = 0
+    //        basic.pause(20)
+    //    }
+    //}
 })
